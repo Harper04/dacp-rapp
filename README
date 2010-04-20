@@ -1,0 +1,19 @@
+1. ABOUT
+DACP-Rapp uses zeroconf the rhythmbox API and a httpserver to create a server for the Iphone Remote App.
+
+2. DEPENCIES
+- python
+- rhythmbox
+- avahi
+
+3. Copy the source folder to your rhythmbox plugin folder.
+e.g. /hone/user/.local/share/rhythmbox/plugins
+
+4. CREDITS
+For breaking the encryption and write some python code:
+- Jeff Sharkey http://jsharkey.org/blog/2009/06/21/itunes-dacp-pairing-hash-is-broken/
+- Michael Paul Baily http://jinxidoru.blogspot.com/2009/06/itunes-remote-pairing-code.html
+For doing some interesting work on the Protocol:
+- Jeff Sharkey http://dacp.jsharkey.org/
+For writing some libaries so i dont have to iplement the encoding myself :D
+- spydaap https://code.launchpad.net/spydaap
