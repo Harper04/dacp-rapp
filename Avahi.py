@@ -10,8 +10,11 @@ class AvahiThread(Thread):
 	def __init__(self):
 		Thread.__init__(self)
 	def run(self):
-		#str(self.storage.getServerPort())
-		os.system('avahi-publish -s 47975973649ECA79 _touch-able._tcp 1500 Ver=131072 DvSv=1905 DbId=47975973649ECA7B DvTy=iTunes OSsi=0xD97F txtvers=1 CtlN=Harper')
+		while self.storage.ishttpserveron==0:
+			#hmn
+			print "Waiting..."
+		print "NEW SERVICE"+str(self.storage.getServerPort())
+		os.system('avahi-publish -s 47975973649ECA79 _touch-able._tcp '+str(self.storage.getServerPort())+' Ver=131072 DvSv=1905 DbId=47975973649ECA7B DvTy=iTunes OSsi=0xD97F txtvers=1 CtlN=Harper')
 
 
 class AvahiThings():
@@ -36,8 +39,9 @@ class AvahiThings():
 
 	def RemoteRemoved(self,interface,protocol,name,stype,domain,flags):
 		print "REMOVED"+name
-		self.source.delete_thyself()
-                self.source = None
+		if self.source != None:
+			self.source.delete_thyself()
+        	        self.source = None
 
 	def run(self,rbshell,rbplugin):
 		print "Avahi THINGS !!!!!!!!!!!!!!"

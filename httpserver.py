@@ -160,9 +160,20 @@ class httpserver(Thread):
 
 	def run(self):
 		print "runned"
-		self.server = BaseHTTPServer.HTTPServer(('', self.storage.getServerPort()), HTTPServerHandler)
+		ex=1
+		while ex==1:
+			try:
+				print "runned"
+				self.storage.newServerPort()
+				self.server = BaseHTTPServer.HTTPServer(('', self.storage.getServerPort()), HTTPServerHandler)
+				ex=0
+				print str(self.storage.getServerPort())+"NEW HTTP SERVER"
+			except:
+				ex=1
+
 		self.server.RequestHandlerClass.storage = self.storage
 		self.on=True
+		self.storage.setishttpserveron(1)
  		while self.on:
 			self.server.handle_request()
 		self.server.server_close()

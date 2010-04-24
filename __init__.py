@@ -30,9 +30,9 @@ class dacprapp (rb.Plugin):
 	print "lool"
 
     def deactivate(self, shell):
-	self.httpserver.stop()
-	del self.httpserver
-        del self.shell
 	self.AvahiThingsO.stop()
 	del self.AvahiThingsO
 	del self.AvahiThreadO
+	self.httpserver.stop()
+	del self.httpserver
+        del self.shell

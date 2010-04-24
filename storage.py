@@ -10,9 +10,14 @@ class storage():
 		#parse devices into list
 		self.devices_list = self.devices_string.split(";")
 		self.sessions = []
+		self.port=1500
+		self.HTTPServer=0
 	def run(self):
 		print "Storage is Up"
-	def getServerPort(self):return 1500
+	def setishttpserveron(self,what): self.HTTPServer=1
+	def ishttpserveron(self): return self.HTTPServer
+	def getServerPort(self):return self.port
+	def newServerPort(self): self.port=self.port+1
 	def deviceIsKnown(self,cmpg):
 		number = self.devices_list.count(cmpg)
 		if number == 0:
