@@ -10,7 +10,7 @@ class AvahiThread(Thread):
 	def __init__(self):
 		Thread.__init__(self)
 	def run(self):
-		while self.storage.ishttpserveron==0:
+		while self.storage.ishttpserveron()==0:
 			#hmn
 			print "Waiting..."
 		print "NEW SERVICE"+str(self.storage.getServerPort())

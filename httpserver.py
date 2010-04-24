@@ -10,14 +10,14 @@ class HTTPServerHandler(BaseHTTPServer.BaseHTTPRequestHandler):
 		if(url.query != ''):		
 			for c in url.query.split("&"): params[c.split("=")[0]] = c.split("=")[1]
 		else: params=None
-		print "Incoming Request:"+self.path+" with "+url.query
 		if(re.match("/login*",url.path)):self.do_GET_login(params)
 		elif(re.match("/server-info*",url.path)): self.do_GET_Server_Info(params)
 		elif(params==None and url.path=="/ctrl-int"): self.do_CTRL_INT(params)
 		elif(self.storage.hasSession(params["session-id"])):#we are logged in
 			if(re.match("/update*",url.path)):self.do_GET_Update(params)
-			if(url.path=="/databases"):self.do_GET_DATABASES_S(params)
 			elif(re.match("/databases/1/containers",url.path)):self.do_GET_DATABASES_U(params)#pretty static, App supports only one db
+			elif(re.match("/databases",url.path)): self.do_GET_DATABASES_S(params)
+			else:print "Incoming unhandled Request:"+url.path+" with "+url.query
 	def do_CTRL_INT(self,params):
 		#who knows what that is? sending same as my itunes-...
 		caci = do('dmap.caci',
@@ -41,6 +41,7 @@ class HTTPServerHandler(BaseHTTPServer.BaseHTTPRequestHandler):
 	def do_GET_DATABASES_U(self,params):#
 		print "unhandled"
 	def do_GET_DATABASES_S(self,params):
+		print "Get Databases Query Processing....."
 		avdb = do('daap.serverdatabases',
 			[do('dmap.status',200),
 			 do('dmap.updatetype',0),
@@ -64,7 +65,7 @@ class HTTPServerHandler(BaseHTTPServer.BaseHTTPRequestHandler):
 			mupd = do('dmap.updateresponse',
 				[do('dmap.status',200),
 				 do('dmap.serverrevision',40)])
-			self.h(mlog.encode())
+			self.h(mupd.encode())
 	def do_GET_login(self,params):
 		if(self.storage.deviceIsKnown(params['pairing-guid'])):
 			sID=self.storage.addSession()

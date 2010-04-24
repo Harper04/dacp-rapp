@@ -40,7 +40,7 @@ class storage():
 	def removeSession(self,session):
 		self.sessions.remove(session)
 	def hasSession(self,session):
-		if session in self.sessions:
+		if int(session) in self.sessions:
 			return True
 		else:
 			return False
