@@ -147,6 +147,8 @@ dmapCodeTypes = {
     'cass': ('dmap.cass','b'),
     'casu': ('dmap.casu','b'),
     'ceSG': ('dmap.ceSG','b'),
+    'cmgt': ('dmap.cmgt','c'),
+    'cmvo': ('dmap.cmvo','i'),
     }
 
 dmapDataTypes = {

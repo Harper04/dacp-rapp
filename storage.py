@@ -1,5 +1,6 @@
 import gconf,random
 from BaseHTTPServer import BaseHTTPRequestHandler, HTTPServer
+import rb, rhythmdb
 
 class storage():
 	def __init__(self):
@@ -46,3 +47,6 @@ class storage():
 			return False
 	def getDBName(self):
 		return "Harper RB DB"
+
+	def getRBVolume(self):
+		return int(self.player.get_volume()*100)

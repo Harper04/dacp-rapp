@@ -12,34 +12,50 @@ class HTTPServerHandler(BaseHTTPServer.BaseHTTPRequestHandler):
 		else: params=None
 		if(re.match("/login*",url.path)):self.do_GET_login(params)
 		elif(re.match("/server-info*",url.path)): self.do_GET_Server_Info(params)
-		elif(params==None and url.path=="/ctrl-int"): self.do_CTRL_INT(params)
+		elif(params==None and url.path=="/ctrl-int"): self.do_CTRL_INT_S(params)
 		elif(self.storage.hasSession(params["session-id"])):#we are logged in
 			if(re.match("/update*",url.path)):self.do_GET_Update(params)
-			elif(re.match("/databases/1/containers",url.path)):self.do_GET_DATABASES_U(params)#pretty static, App supports only one db
+			elif(re.match("/databases/1/containers",url.path)):self.do_GET_DATABASES_U(params,url.path,url.query)#pretty static, App supports only one db
 			elif(re.match("/databases",url.path)): self.do_GET_DATABASES_S(params)
+			elif(re.match("/ctrl-int",url.path)): self.do_CTRL_INT(params,url.path,url.query)
 			else:print "Incoming unhandled Request:"+url.path+" with "+url.query
-	def do_CTRL_INT(self,params):
-		#who knows what that is? sending same as my itunes-...
-		caci = do('dmap.caci',
-				[do('dmap.status',200),
-				 do('dmap.updatetype',0),
-				 do('dmap.specifiedtotalcount',1),
-				 do('dmap.returnedcount',1),
-				 do('dmap.listing',
-					[do('dmap.listingitem',
-						[do('dmap.itemid',1),
-						 do('dmap.cmik',1),
-						 do('dmap.cmsp',1),
-						 do('dmap.cmsv',1),
-						 do('cass',1),
-						 do('casu',1),
-						 do('ceSG',1),
-						 ])
+	def do_CTRL_INT(self,params,url,query):
+		if(re.match("/ctrl-int/1/getproperty",url)):#okay we want to get something
+			if(params["properties"]=="dmcp.volume"):
+				cmgt = do('dmap.cmgt',
+					[do('dmap.status',200),
+					 do('dmap.cmvo',self.storage.getRBVolume())
 					])
-				 ])
-		self.h(caci.encode())
-	def do_GET_DATABASES_U(self,params):#
-		print "unhandled"
+				self.h(cmgt.encode())
+			else: print url+query+" unimplemented"
+		elif(re.match("/ctrl-int/1/getspeakers",url)):
+			print "getspeakers"
+		elif(re.match("setproperty",url)):#okay something to set...
+			print url+query+" unimplemented"
+		else: print str(url)+query+"What the hack is that!?!"
+	def do_CTRL_INT_S(self,params):
+		#who knows what that is? sending same as my itunes-...
+		if(params==None):
+			caci = do('dmap.caci',
+					[do('dmap.status',200),
+					 do('dmap.updatetype',0),
+					 do('dmap.specifiedtotalcount',1),
+					 do('dmap.returnedcount',1),
+					 do('dmap.listing',
+						[do('dmap.listingitem',
+							[do('dmap.itemid',1),
+							 do('dmap.cmik',1),
+							 do('dmap.cmsp',1),
+							 do('dmap.cmsv',1),
+							 do('cass',1),
+							 do('casu',1),
+							 do('ceSG',1),
+							 ])
+						])
+					 ])
+			self.h(caci.encode())
+	def do_GET_DATABASES_U(self,params,path,p):#
+		print "unhandled "+path+p
 	def do_GET_DATABASES_S(self,params):
 		print "Get Databases Query Processing....."
 		avdb = do('daap.serverdatabases',

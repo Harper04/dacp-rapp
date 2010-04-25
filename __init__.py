@@ -14,20 +14,21 @@ class dacprapp (rb.Plugin):
     def activate(self, shell):
         self.shell = shell
 	self.storage = storage()
+	self.storage.shell = self.shell
+	self.storage.player = self.shell.get_player()
+	self.storage.db = self.shell.props.db
+
 	self.httpserver = httpserver()
 	self.httpserver.storage=self.storage
 	self.httpserver.start()
 
 	#Unseren Server advertisen
-	print
 	self.AvahiThreadO = AvahiThread()
 	self.AvahiThreadO.storage = self.storage
 	self.AvahiThreadO.start()
-	print "loel"
 	#blah
 	self.AvahiThingsO = AvahiThings()
 	self.AvahiThingsO.run(shell,self)
-	print "lool"
 
     def deactivate(self, shell):
 	self.AvahiThingsO.stop()
