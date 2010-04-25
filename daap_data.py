@@ -149,6 +149,27 @@ dmapCodeTypes = {
     'ceSG': ('dmap.ceSG','b'),
     'cmgt': ('dmap.cmgt','c'),
     'cmvo': ('dmap.cmvo','i'),
+    'casp': ('dmap.casp','c'),
+    'caia': ('dmap.caia','b'),
+    'msma': ('dmap.msma','l'),
+    'cmst': ('dmap.cmst','c'),
+    'cmsr': ('dmap.cmsr','i'),
+    'caps': ('dmap.caps','b'),
+    'cash': ('dmap.cash','b'),
+    'carp': ('dmap.carp','b'),
+    'cavc': ('dmap.cavc','b'),
+    'caas': ('dmap.caas','i'),
+    'caar': ('dmap.caar','i'),
+    'canp': ('dmap.canp','s'),#???
+    'cann': ('dmap.cann','s'),
+    'cana': ('dmap.cana','s'),
+    'canl': ('dmap.canl','s'),
+    'cang': ('dmap.cang','s'),
+    'asai': ('dmap.asai','l'),
+    'cmmk': ('dmap.cmmk','i'),
+    'ceGS': ('dmap.ceGS','b'),
+    'cant': ('dmap.cant','i'),
+    'cast': ('dmap.cast','i'),
     }
 
 dmapDataTypes = {

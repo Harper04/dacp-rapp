@@ -48,5 +48,34 @@ class storage():
 	def getDBName(self):
 		return "Harper RB DB"
 
+	def isplaying(self): 
+		try: 
+			self.player.get_playing_time()
+			return True
+		except:
+			return False
+	def ispaused(self):
+		try:
+			if(self.player.get_playing()):
+				return False
+			else: 
+				self.isplaying()
+				return True
+		except:
+			return False
+	def isshuffleactive(self): return self.player.get_playback_state()[0]
+	def isrepeatactive(self):  return self.player.get_playback_state()[1]
 	def getRBVolume(self):
 		return int(self.player.get_volume()*100)
+	def getNowPlayingInformation(self):
+		entry=self.player.get_playing_entry()
+		time=int(self.player.get_playing_time())*1000
+		time_total=int(self.player.get_playing_song_duration())*1000
+		return [self.getSongInfo(entry),time,time_total]
+	def getSongInfo(self,entry):
+		title = str(self.db.entry_get(entry,rhythmdb.PROP_TITLE))
+		artist = str(self.db.entry_get(entry,rhythmdb.PROP_ARTIST))
+		album = str(self.db.entry_get(entry,rhythmdb.PROP_ALBUM))
+		entry_id = int(str(self.db.entry_get(entry,rhythmdb.PROP_ENTRY_ID)))
+		genre = str(self.db.entry_get(entry,rhythmdb.PROP_GENRE))		
+		return [entry_id,title,artist,album,genre]

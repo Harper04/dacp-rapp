@@ -29,7 +29,61 @@ class HTTPServerHandler(BaseHTTPServer.BaseHTTPRequestHandler):
 				self.h(cmgt.encode())
 			else: print url+query+" unimplemented"
 		elif(re.match("/ctrl-int/1/getspeakers",url)):
-			print "getspeakers"
+			#we only have 1 speaker _ever_ so static...
+			casp = do('dmap.casp',
+				[do('dmap.status',200),
+					do('dmap.dictionary',
+					[do('dmap.caia',1),
+					 do('dmap.itemname',"Rhythmbox"),
+					 do('dmap.msma',0)
+					])
+				])
+			self.h(casp.encode())
+		elif(re.match("/ctrl-int/1/playstatusupdate",url)):
+			if(self.storage.isshuffleactive()): shufflestatus=1
+			else: shufflestatus=0
+
+			if(self.storage.isrepeatactive()): repeat=2
+			else: repeat=0
+
+			if(self.storage.isplaying()):
+				if(self.storage.ispaused()):
+					playstatus=3
+				else:
+					playstatus=4
+				n=self.storage.getNowPlayingInformation()
+				cmst = do('dmap.cmst',
+					[do('dmap.status',200),
+					 do('dmap.cmsr',1),
+					 do('dmap.caps',2),#playstatus
+					 do('dmap.cash',shufflestatus),
+					 do('dmap.carp',repeat),
+					 do('dmap.cavc',1),
+					 do('dmap.caas',2),
+					 do('dmap.caar',6),
+					 do('dmap.canp',"1"),
+					 do('dmap.cann',p[0][1]),
+					 do('dmap.cana',p[0][2]),
+					 do('dmap.canl',p[0][3]),
+					 do('dmap.cang',p[0][4]),
+					 do('dmap.asai',0),
+					 do('dmap.cmmk',1),
+					 do('dmap.ceGS',1),
+					 do('dmap.cant',p[2]-p[1]),
+					 do('dmap.cast',p[1])
+					])
+			else:
+				cmst = do('dmap.cmst',
+					[do('dmap.status',200),
+					 do('dmap.cmsr',1),
+					 do('dmap.caps',2),#playstatus
+					 do('dmap.cash',shufflestatus),
+					 do('dmap.carp',repeat),
+					 do('dmap.cavc',1),
+					 do('dmap.caas',2),
+					 do('caar',6)
+					])
+			self.h(cmst.encode())
 		elif(re.match("setproperty",url)):#okay something to set...
 			print url+query+" unimplemented"
 		else: print str(url)+query+"What the hack is that!?!"
