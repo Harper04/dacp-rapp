@@ -1,39 +1,21 @@
-import httpserver
-import rhythmdb, rb
+import dbus,dbus.service,dbus.glib
 import gobject
-import gtk
-from RemoteSource import RemoteSource
-from storage import storage
-from httpserver import httpserver
-from Avahi import AvahiThread,AvahiThings
+from dacpdbus import loginClass
+from couchdbStorage import CouchStorage
+#start dacp-daemon
+class initDaemon():
+	def initAlltheDBUSInterfaces(self):
+		bus = dbus.SessionBus()
+		name = dbus.service.BusName("eu.quenyagermany.dacpdaemon",bus=bus)
+		obj = loginClass(name,"/")
+		obj.Daemon=self
+	def initCouchDBAccess(self):
+		self.CStorage = CouchStorage()
+	def startMainLoop(self):
+		self.loop = gobject.MainLoop()
+		self.loop.run()
 
-class dacprapp (rb.Plugin):
-    def __init__(self):
-        rb.Plugin.__init__(self)
-
-    def activate(self, shell):
-        self.shell = shell
-	self.storage = storage()
-	self.storage.shell = self.shell
-	self.storage.player = self.shell.get_player()
-	self.storage.db = self.shell.props.db
-
-	self.httpserver = httpserver()
-	self.httpserver.storage=self.storage
-	self.httpserver.start()
-
-	#Unseren Server advertisen
-	self.AvahiThreadO = AvahiThread()
-	self.AvahiThreadO.storage = self.storage
-	self.AvahiThreadO.start()
-	#blah
-	self.AvahiThingsO = AvahiThings()
-	self.AvahiThingsO.run(shell,self)
-
-    def deactivate(self, shell):
-	self.AvahiThingsO.stop()
-	del self.AvahiThingsO
-	del self.AvahiThreadO
-	self.httpserver.stop()
-	del self.httpserver
-        del self.shell
+server=initDaemon()
+server.initAlltheDBUSInterfaces()
+server.initCouchDBAccess()
+server.startMainLoop()
